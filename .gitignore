@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+#Extras 
+answer_part_one.txt
+answer_part_two.txt
