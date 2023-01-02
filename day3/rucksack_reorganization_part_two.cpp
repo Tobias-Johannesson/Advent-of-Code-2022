@@ -1,27 +1,50 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <map>
+// #include <map>
 
 
-std::string findCommonItem( std::string rucksackOne, std::string rucksackTwo ) {
+std::string findCommonItem( std::string rucksacks[] ) {
     std::string rucksackOneItem;
     std::string rucksackTwoItem;
+    std::string rucksackThreeItem;
+    std::string commonItemsBetweenFirstTwo [rucksacks[0].length()];
+    std::string potentialCommonItem;
 
-    int numberOfItems = rucksackOne.length();
+    int numberOfItemsFound = 0;
 
-    for ( int i = 0; i < numberOfItems; i++ ) {
-        rucksackOneItem = rucksackOne[i];
+    for ( int i = 0; i < rucksacks[0].length(); i++ ) {
+        rucksackOneItem = rucksacks[0][i];
 
-        for ( int j = 0; j < numberOfItems; j++ ) {
-            rucksackTwoItem = rucksackTwo[j];
+        for ( int j = 0; j < rucksacks[1].length(); j++ ) {
+            rucksackTwoItem = rucksacks[1][j];
 
-            if ( rucksackOneItem == rucksackTwoItem ) {
-                return rucksackOneItem;
+            for ( int k = 0; k < numberOfItemsFound; k++) {
+                if ( rucksackOneItem == commonItemsBetweenFirstTwo[k] ) {
+                    break;
+                }
+            }
+
+            if ( rucksackOneItem.compare(rucksackTwoItem) == 0 ) {
+                commonItemsBetweenFirstTwo[numberOfItemsFound] = rucksackOneItem;
+                numberOfItemsFound += 1;
+                break;
             }
         }
     }
-    
+
+    for ( int i = 0; i < numberOfItemsFound; i++ ) {
+        potentialCommonItem = commonItemsBetweenFirstTwo[i];
+
+        for ( int j = 0; j < rucksacks[2].length(); j++ ) {
+            rucksackThreeItem = rucksacks[2][j];
+
+            if ( potentialCommonItem == rucksackThreeItem ) {
+                return potentialCommonItem;
+            }
+        }
+    }
+
     return "";
 }
 
@@ -47,23 +70,25 @@ int main() {
     int totalItemPriorityValues = 0;
 
     if ( file.is_open() ) {
-        int currentPriority = 0;
-        int lineLength = 0;
-        std::string rucksackOne = "";
-        std::string rucksackTwo = "";
+        std::string elvesRucksacks[3];
         std::string commonItem = "";
+
         int itemPriorityValue = 0;
 
         while (file) {  
-            std::getline (file, line);
+
+            for ( int elf = 0; elf < 3; elf++ ) {
+                // Handle potential error
+                std::getline (file, line);
+
+                if (line != "") {
+                    elvesRucksacks[elf] = line;
+                }
+            }
 
             if (line != "") {
-                lineLength = line.length();
-                rucksackOne = line.substr(0, lineLength/2);
-                rucksackTwo = line.substr(lineLength/2, lineLength);
 
-                std::cout << rucksackOne << " " << rucksackTwo << "\n";
-                commonItem = findCommonItem(rucksackOne, rucksackTwo); 
+                commonItem = findCommonItem(elvesRucksacks); 
                 itemPriorityValue = getItemPriorityValue(commonItem);
 
                 totalItemPriorityValues += itemPriorityValue;

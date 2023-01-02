@@ -62,7 +62,6 @@ int main() {
                 rucksackOne = line.substr(0, lineLength/2);
                 rucksackTwo = line.substr(lineLength/2, lineLength);
 
-                std::cout << rucksackOne << " " << rucksackTwo << "\n";
                 commonItem = findCommonItem(rucksackOne, rucksackTwo); 
                 itemPriorityValue = getItemPriorityValue(commonItem);
 
